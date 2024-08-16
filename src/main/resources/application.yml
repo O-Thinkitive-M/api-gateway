@@ -1,0 +1,32 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+#      default-filters:
+#        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins: '*'
+#            allowedMethods: '*'
+#            allowedHeaders: '*'
+      routes:
+        - id: USER-SERVICE
+          predicates:
+            - Path=/user/** , /swagger-ui/** , /api-docs/** , /api-docs , /swagger-resources , /swagger-resources/** , /swagger-ui.html , /v3/api-docs , /v3/api-docs/**
+          uri: lb://USER-SERVICE/**
+        - id: ACCOUNT-SERVICE
+          predicates:
+            - Path=/account/**
+          uri: lb://ACCOUNT-SERVICE
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
